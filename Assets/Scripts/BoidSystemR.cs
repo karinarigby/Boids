@@ -6,6 +6,20 @@ namespace Refactored
 {
     public class BoidSystemR : MonoBehaviour
     {
+
+
+        float ComputeDistanceWeight(Vector3 distance)
+        {
+            float closeDistanceThreshold = 0.5f;
+            float farDistanceThreshold = 1.5f;
+            float magnitude = distance.magnitude;
+            if (magnitude < closeDistanceThreshold)
+                return 1.0f;
+            if ((closeDistanceThreshold <= magnitude) && (magnitude <= farDistanceThreshold))
+                return (farDistanceThreshold - magnitude) /(farDistanceThreshold-closeDistanceThreshold);
+            return 0;
+        }
+
         float ComputeVisualFieldWeight(BoidR thisBoid, BoidR thatBoid)
         {
             float binocularAngleOverTwo = thisBoid.BinocularAreaRangeAngle/2;
