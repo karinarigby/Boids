@@ -37,5 +37,24 @@ namespace Refactored
             return -1;
 
         }
-    }
 
+        Vector3 GetAccelerationPrioritization(Vector3 collisionAvoidance, Vector3 velocityMatch, Vector3 centering)
+        {
+            float accelerationCap = 0.5f;
+            float residualAcceleration = accelerationCap;
+
+            Vector3 combinedAcceleration = Mathf.Min(residualAcceleration, collisionAvoidance.magnitude) * collisionAvoidance.normalized;
+            residualAcceleration = accelerationCap - combinedAcceleration.magnitude;
+
+            combinedAcceleration = combinedAcceleration +
+                Mathf.Min(residualAcceleration, velocityMatch.magnitude) * velocityMatch.normalized;
+            residualAcceleration = accelerationCap - combinedAcceleration.magnitude;
+
+            combinedAcceleration = combinedAcceleration + Mathf.Min(residualAcceleration, centering.magnitude) * centering.normalized;
+
+            return combinedAcceleration;
+        }
+
+        
+    }
+}
