@@ -86,23 +86,19 @@ namespace Refactored
             return boidObjectPool[i].transform.position;
         }
 
-
+        /// <summary>
+        /// Checks if there is a list of game objects initialized at the voxel
+        /// </summary>
+        /// <param name="position">The hash location to check</param>
+        /// <returns></returns>
         bool VoxelAtPositionEmpty(Vector3 position)
         {
-            return spatialGrid[(int)Mathf.Floor(position.x), (int)Mathf.Floor(position.y), (int)Mathf.Floor(position.z)] == null;
+            return spatialGrid[(int)Mathf.Floor(position.x), (int)Mathf.Floor(position.y), (int)Mathf.Floor(position.z)].Count == 0;
         }
 
-        /// Initiates the List at the voxel of the uniform spatial
-        /// grid data structure given the position.
+        /// <summary>
+        /// Instantiate an objectPool of boids for use and reuse
         /// </summary>
-        /// <param name="position"></param>
-        void InitVoxelList(Vector3 position)
-        {
-            spatialGrid[(int)Mathf.Floor(position.x),
-                        (int)Mathf.Floor(position.y),
-                        (int)Mathf.Floor(position.z)] = new List<GameObject>();
-        }
-
         void InitBoidPool()
         {
             Vector3 startPosition;
@@ -128,7 +124,7 @@ namespace Refactored
                 {
                     for(int k = 0; k < flySpace; k++)
                     {
-                        if (VoxelEmpty(i, j, k)) continue;
+                        if (spatialGrid[i,j,k].Count == 0) continue;
 
 
                     }
