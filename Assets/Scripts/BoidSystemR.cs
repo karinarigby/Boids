@@ -96,6 +96,11 @@ namespace Refactored
             return spatialGrid[(int)Mathf.Floor(position.x), (int)Mathf.Floor(position.y), (int)Mathf.Floor(position.z)].Count == 0;
         }
 
+        bool VoxelEmpty(int i, int j, int k)
+        {
+            return spatialGrid[i, j, k].Count == 0;
+        }
+
         /// <summary>
         /// Instantiate an objectPool of boids for use and reuse
         /// </summary>
