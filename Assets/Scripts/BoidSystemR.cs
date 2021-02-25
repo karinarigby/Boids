@@ -9,10 +9,8 @@ namespace Refactored
         List<GameObject>[,,] spatialGrid;
         static int numberBoids = 15;
         static int flySpace = 80;
-        GameObject boidPrefab;
+        public GameObject boidPrefab;
         public static GameObject[] boidObjectPool = new GameObject[numberBoids];
-
-
 
         void Start()
         {
