@@ -12,6 +12,54 @@ namespace Refactored
         public static GameObject[] boidObjectPool = new GameObject[numberBoids];
 
 
+
+        void Start()
+        {
+            InitSpatialGrid();
+            UpdateBoidPositions();
+        }
+
+        void InitSpatialGrid()
+        {
+            spatialGrid = new List<GameObject>[flySpace, flySpace, flySpace];
+
+            Vector3 boidStartPosition = new Vector3();
+            for (int i = 0; i < numberBoids; i++)
+            {
+                // boidStartPosition =
+                boidStartPosition = GetStartPosition();
+            }
+        }
+
+        Vector3 GetStartPosition()
+        {
+            return new Vector3(Random.Range(0.0f + (3 * flySpace / 7), flySpace - (3 * flySpace / 7)),
+                               Random.Range(0.0f + (3 * flySpace / 7), flySpace - (3 * flySpace / 7)),
+                               Random.Range(0.0f + (3 * flySpace / 7), flySpace - (3 * flySpace / 7)));
+
+        }
+
+        void UpdateBoidPositions()
+        {
+            for(int i = 0; i < flySpace; i++)
+            {
+                for(int j=0; j < flySpace; j++)
+                {
+                    for(int k = 0; k < flySpace; k++)
+                    {
+                        if (VoxelEmpty(i, j, k)) continue;
+
+
+                    }
+                }
+            }
+        }
+
+        bool VoxelEmpty(int i, int j, int k)
+        {
+            return spatialGrid[i, j, k] == null;
+        }
+
         float ComputeDistanceWeight(Vector3 distance)
         {
             float closeDistanceThreshold = 0.5f;
