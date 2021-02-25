@@ -34,10 +34,34 @@ namespace Refactored
             {
                 position = GetBoidPosition(i);
 
-                if (VoxelListEmpty)
-                InitVoxelList(position);
+                if (VoxelAtPositionEmpty(position))
+                    InitVoxelList(position);
 
+                AddBoidToVoxel(position, boidObjectPool[i]);
             }
+        }
+
+        /// <summary>
+        /// Adds the game object to the list of boids at the voxel
+        /// </summary>
+        /// <param name="position">Where in spatial uniform
+        /// grid to hash position to</param>
+        /// <param name="boid">The game object to append on to list</param>
+        void AddBoidToVoxel(Vector3 position, GameObject boid)
+        {
+            ListAtPosition(position).Add(boid);
+        }
+
+        /// <summary>
+        /// Returns the list of the boids at the voxel in uniform spatial grid
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        List<GameObject> ListAtPosition(Vector3 position)
+        {
+            return spatialGrid[(int)Mathf.Floor(position.x),
+                               (int)Mathf.Floor(position.y),
+                               (int)Mathf.Floor(position.z)];
         }
 
         /// <summary>
