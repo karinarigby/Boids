@@ -9,6 +9,7 @@ namespace Refactored
         List<GameObject>[,,] spatialGrid;
         static int numberBoids = 15;
         static int flySpace = 80;
+        GameObject boidPrefab;
         public static GameObject[] boidObjectPool = new GameObject[numberBoids];
 
 
@@ -19,24 +20,68 @@ namespace Refactored
             UpdateBoidPositions();
         }
 
+        /// <summary>
+        /// Sets up the boid object pool and hashes each
+        /// boid to a spatial uniform grid.
+        /// </summary>
         void InitSpatialGrid()
         {
             spatialGrid = new List<GameObject>[flySpace, flySpace, flySpace];
 
-            Vector3 boidStartPosition = new Vector3();
+            InitBoidPool();
+            Vector3 position;
             for (int i = 0; i < numberBoids; i++)
             {
-                // boidStartPosition =
-                boidStartPosition = GetStartPosition();
+                position = GetBoidPosition(i);
+
+                if (VoxelListEmpty)
+                InitVoxelList(position);
+
             }
         }
 
-        Vector3 GetStartPosition()
+        /// <summary>
+        /// Retrieves the position of the GameObject of boidObjectPool
+        /// </summary>
+        /// <param name="i">the index of boidObjectPool</param>
+        /// <returns></returns>
+        Vector3 GetBoidPosition(int i)
+        {
+            return boidObjectPool[i].transform.position;
+        }
+
+
+        bool VoxelListEmpty(Vector3 position)
+        {
+            return spatialGrid[(int)Mathf.Floor(position.x), (int)Mathf.Floor(position.y), (int)Mathf.Floor(position.z)] == null;
+        }
+
+        /// Initiates the List at the voxel of the uniform spatial
+        /// grid data structure given the position.
+        /// </summary>
+        /// <param name="position"></param>
+        void InitVoxelList(Vector3 position)
+        {
+                spatialGrid[(int)Mathf.Floor(position.x),
+                            (int)Mathf.Floor(position.y),
+                            (int)Mathf.Floor(position.z)] = new List<GameObject>();
+        }
+
+        void InitBoidPool()
+        {
+            Vector3 startPosition;
+            for(int i = 0; i < numberBoids; i++)
+            {
+                startPosition = GetRandomStartPosition();
+                boidObjectPool[i] = Instantiate(boidPrefab, startPosition, Quaternion.identity);
+            }
+        }
+
+        Vector3 GetRandomStartPosition()
         {
             return new Vector3(Random.Range(0.0f + (3 * flySpace / 7), flySpace - (3 * flySpace / 7)),
                                Random.Range(0.0f + (3 * flySpace / 7), flySpace - (3 * flySpace / 7)),
                                Random.Range(0.0f + (3 * flySpace / 7), flySpace - (3 * flySpace / 7)));
-
         }
 
         void UpdateBoidPositions()
