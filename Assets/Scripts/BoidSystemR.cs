@@ -127,23 +127,102 @@ namespace Refactored
 
         void UpdateBoidPositions()
         {
+            BoidR currentBoid;
+            Vector3 currentBoidPosition;
+            List<GameObject> boidNeighbours = new List<GameObject>();
             for(int i = 0; i < flySpace; i++)
             {
                 for(int j=0; j < flySpace; j++)
                 {
                     for(int k = 0; k < flySpace; k++)
                     {
-                        if (spatialGrid[i,j,k].Count == 0) continue;
+                        if (VoxelEmpty(i,j,k)) continue;
+                        int boidCountAtVoxel = VoxelCount(i, j, k);
 
+                        int neighbourCount;
+                        for (int boidInVoxel = 0; boidInVoxel < boidCountAtVoxel; boidInVoxel++)
+                        {
+                            currentBoid = GetBoid(i, j, k, boidInVoxel);
+                            boidNeighbours = GetBoidNeighbours(i, j, k);
+                            currentBoidPosition = GetBoidPosition(i, j, k, boidInVoxel);
+                            neighbourCount = boidNeighbours.Count;
+
+
+
+
+                        }
+
+
+                            
 
                     }
                 }
             }
         }
 
-        bool VoxelEmpty(int i, int j, int k)
+        Vector3 GetBoidPosition(int i, int j, int k, int boidListPosition)
         {
-            return spatialGrid[i, j, k] == null;
+            return spatialGrid[i, j, k][boidListPosition].transform.position;
+        }
+
+        /// <summary>
+        /// Retrieves a list of all the boids in adjacent voxels to
+        /// spatialGrid at i,j,k.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        List<GameObject> GetBoidNeighbours(int i, int j, int k)
+        {
+            List<GameObject> neighbours = new List<GameObject>();
+
+            for (int iNeighbour = i - 1; iNeighbour <= i + 1; iNeighbour++)
+            {
+                if (NeighbourOutOfBounds(iNeighbour)) continue;
+                for (int jNeighbour = j - 1; jNeighbour <= j + 1; jNeighbour++)
+                {
+                    if (NeighbourOutOfBounds(jNeighbour)) continue;
+                    for (int kNeighbour = k - 1; kNeighbour <= k + 1; kNeighbour++)
+                    {
+                        if (NeighbourOutOfBounds(kNeighbour)) continue;
+                        neighbours.AddRange(spatialGrid[iNeighbour, jNeighbour, kNeighbour]);
+                    }
+                }
+            }
+
+            return neighbours;
+        }
+
+        bool NeighbourOutOfBounds(int position)
+        {
+            return ((position < 0) || (position >= flySpace));
+        }
+
+        /// <summary>
+        /// Retrieves the BoidR component of the boid at the position in the list
+        /// and at the particular voxel.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="k"></param>
+        /// <param name="boidPosition"></param>
+        /// <returns></returns>
+        BoidR GetBoid(int i, int j, int k, int boidPosition)
+        {
+            return spatialGrid[i, j, k][boidPosition].GetComponent<BoidR>();
+        }
+
+        /// <summary>
+        /// Returns the amount of boids at a given voxel
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        int VoxelCount(int i, int j, int k)
+        {
+            return spatialGrid[i, j, k].Count;
         }
 
         float ComputeDistanceWeight(Vector3 distance)
