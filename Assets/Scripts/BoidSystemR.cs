@@ -8,7 +8,7 @@ namespace Refactored
     {
         List<GameObject>[,,] spatialGrid;
         static int numberBoids = 15;
-        static int flySpace = 80;
+        static int flySpace = 40;
         public GameObject boidPrefab;
         public static GameObject[] boidObjectPool = new GameObject[numberBoids];
 
@@ -147,7 +147,12 @@ namespace Refactored
                             currentBoidPosition = GetBoidPosition(i, j, k, boidInVoxel);
                             neighbourCount = boidNeighbours.Count;
 
+                            int currentBoidID = currentBoid.GetInstanceID();
+                            int boidNeighbourID = boidNeighbours[boidInVoxel].GetInstanceID();
 
+                            if (currentBoidID == boidNeighbourID) continue;
+
+                            BoidR otherBoid = boidNeighbours[boidInVoxel].GetComponent<BoidR>();
 
 
                         }
