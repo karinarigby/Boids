@@ -75,7 +75,7 @@ namespace Refactored
         }
 
 
-        bool VoxelListEmpty(Vector3 position)
+        bool VoxelAtPositionEmpty(Vector3 position)
         {
             return spatialGrid[(int)Mathf.Floor(position.x), (int)Mathf.Floor(position.y), (int)Mathf.Floor(position.z)] == null;
         }
@@ -86,9 +86,9 @@ namespace Refactored
         /// <param name="position"></param>
         void InitVoxelList(Vector3 position)
         {
-                spatialGrid[(int)Mathf.Floor(position.x),
-                            (int)Mathf.Floor(position.y),
-                            (int)Mathf.Floor(position.z)] = new List<GameObject>();
+            spatialGrid[(int)Mathf.Floor(position.x),
+                        (int)Mathf.Floor(position.y),
+                        (int)Mathf.Floor(position.z)] = new List<GameObject>();
         }
 
         void InitBoidPool()
