@@ -6,6 +6,10 @@ namespace Refactored
 {
     public class BoidSystemR : MonoBehaviour
     {
+        List<GameObject>[,,] spatialGrid;
+        static int numberBoids = 15;
+        static int flySpace = 80;
+        public static GameObject[] boidObjectPool = new GameObject[numberBoids];
 
 
         float ComputeDistanceWeight(Vector3 distance)
