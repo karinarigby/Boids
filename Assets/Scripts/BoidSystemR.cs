@@ -24,18 +24,32 @@ namespace Refactored
         /// </summary>
         void InitSpatialGrid()
         {
-            spatialGrid = new List<GameObject>[flySpace, flySpace, flySpace];
-
+            InitGridDataStructures();
             InitBoidPool();
             Vector3 position;
+
             for (int i = 0; i < numberBoids; i++)
             {
                 position = GetBoidPosition(i);
+                AddBoidToVoxel(position, boidObjectPool[i]);  
+            }
+        }
 
-                if (VoxelAtPositionEmpty(position))
-                    InitVoxelList(position);
-
-                AddBoidToVoxel(position, boidObjectPool[i]);
+        /// <summary>
+        ///  Init the uniform spatial grid and each voxel list
+        /// </summary>
+        void InitGridDataStructures()
+        {
+            spatialGrid = new List<GameObject>[flySpace, flySpace, flySpace];
+            for (int i = 0; i < flySpace; i++)
+            {
+                for (int j = 0; j < flySpace; j++)
+                {
+                    for (int k = 0; k < flySpace; k++)
+                    {
+                        spatialGrid[i, j, k] = new List<GameObject>();
+                    }
+                }
             }
         }
 
