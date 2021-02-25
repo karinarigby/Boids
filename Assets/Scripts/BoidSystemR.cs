@@ -114,6 +114,10 @@ namespace Refactored
             }
         }
 
+        /// <summary>
+        /// Compute a random vector within the flyspace
+        /// </summary>
+        /// <returns>A randomized position vector</returns>
         Vector3 GetRandomStartPosition()
         {
             return new Vector3(Random.Range(0.0f + (3 * flySpace / 7), flySpace - (3 * flySpace / 7)),
