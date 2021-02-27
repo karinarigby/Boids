@@ -7,14 +7,26 @@ namespace Refactored
     public class BoidSystemR : MonoBehaviour
     {
         List<GameObject>[,,] spatialGrid;
-        static int numberBoids = 15;
-        static int flySpace = 40;
+        public int numberBoids;
+        public int flySpace = 40;
         public GameObject boidPrefab;
-        public static GameObject[] boidObjectPool = new GameObject[numberBoids];
+        public GameObject[] boidObjectPool;
+
+        //these are variables to play with that affects flocking behaviour
+        public float kCollisionScale = 0.5f;
+        public float kVelocityScale = 0.7f;
+        public float kCenteringScale = 0.1f;
+
 
         void Start()
         {
+            boidObjectPool = new GameObject[numberBoids];
             InitSpatialGrid();
+        }
+
+        void FixedUpdate()
+        {
+            Reset();
             UpdateBoidPositions();
         }
 
