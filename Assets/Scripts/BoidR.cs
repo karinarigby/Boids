@@ -17,13 +17,24 @@ namespace Refactored
         public Vector3 LastPosition { get; set; }
 
         //This determines the boid's initial speed
-        Vector3 relativeOldPosition = new Vector3(0, 0.1f, 0);
+        Vector3 relativeOldPosition = new Vector3(0.0f, 0.1f, 0.0f);
 
         private void Start()
         {
-            LastPosition = transform.position - relativeOldPosition;
-            Velocity.Set(0.0f, 0.1f, 0.0f);
+            LastPosition = CalculateLastPosition();
+            Velocity.Set(0.01f, 0.01f, 0.0f);
         }
 
+        public void Reset()
+        {
+            Velocity = Vector3.zero;
+            LastPosition = CalculateLastPosition();
+        }
+
+        Vector3 CalculateLastPosition()
+        {
+            return transform.position - relativeOldPosition;
+        }
     }
 }
+
