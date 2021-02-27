@@ -219,8 +219,14 @@ namespace Refactored
                             Vector3 acceleration = GetAccelerationPrioritization(collision, velocityMatch, centering);
                             currentBoid.Velocity = ComputeVelocity(acceleration, currentBoid);
 
-                            
+                            ComputePosition(acceleration, currentBoid, i,j,k);
 
+                            //Vector3 temp = currentBoidPosition;
+                            //spatialGrid[i, j, k][boidVoxelIndex].transform.position =
+                            //     (2.0f * currentBoidPosition) - currentBoid.LastPosition + ((Time.deltaTime * Time.deltaTime) * (acceleration));
+                            //currentBoid.LastPosition = temp;
+                            boidNeighbours.Clear();
+                        }
                     }
                 }
             }
