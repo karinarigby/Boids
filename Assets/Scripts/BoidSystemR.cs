@@ -230,6 +230,64 @@ namespace Refactored
                     }
                 }
             }
+            foreach(var list in spatialGrid)
+            {
+                list.Clear();
+            }
+            //int gridTotalLength = spatialGrid.GetLength(0) * spatialGrid.GetLength(1) * spatialGrid.GetLength(2);
+            //System.Array.Clear(spatialGrid, 0, gridTotalLength);
+        }
+
+        void ComputePosition(Vector3 acceleration, BoidR boid, int i, int j, int k)
+        {
+            Vector3 tempPosition = boid.transform.position;
+            float deltaTimeSquared = (Time.fixedDeltaTime * Time.fixedDeltaTime);
+
+            //Euler's integration
+            Vector3 newPosition =  (2.0f * boid.transform.position) - boid.LastPosition + (deltaTimeSquared * acceleration);
+            boid.transform.position = newPosition;
+            boid.LastPosition = tempPosition;
+        }
+
+        Vector3 ComputeVelocity(Vector3 acceleration, BoidR boid)
+        {
+            return acceleration * Time.fixedDeltaTime + boid.Velocity;
+        }
+
+        void ComputeWeightAndAccelerations(BoidR currentBoid, BoidR otherBoid, Vector3 collision, Vector3 velocityMatch, Vector3 centering)
+        {
+            float visualFieldWeight = ComputeVisualFieldWeight(currentBoid, otherBoid);
+
+            Vector3 distance = GetDistanceBetweenBoids(currentBoid, otherBoid);
+            float distanceWeight = ComputeDistanceWeight(distance);
+
+            collision = AddCollisionForce(collision, visualFieldWeight, distanceWeight, distance);
+            velocityMatch = AddVelocityForce(velocityMatch, visualFieldWeight, distanceWeight, currentBoid, otherBoid);
+            centering = AddCenteringForce(centering, visualFieldWeight, distanceWeight, distance);
+        }
+
+
+        Vector3 AddCollisionForce(Vector3 collision, float fieldWeight, float distanceWeight, Vector3 distance)
+        {
+            collision += fieldWeight * distanceWeight * (-1.0f * (kCollisionScale / (distance.magnitude + 0.01f)) * distance.normalized);
+            return collision;
+        }
+
+        Vector3 AddVelocityForce(Vector3 velocityMatch, float fieldWeight, float distanceWeight, BoidR currBoid, BoidR otherBoid)
+        {
+            velocityMatch += fieldWeight * distanceWeight * (kVelocityScale * (otherBoid.Velocity - currBoid.Velocity));
+            return velocityMatch;
+        }
+
+        Vector3 AddCenteringForce(Vector3 centering, float fieldWeight, float distanceWeight, Vector3 distance)
+        {
+            centering += fieldWeight * distanceWeight * kCenteringScale * distance;
+            return centering;
+        }
+
+        Vector3 GetDistanceBetweenBoids(BoidR currentBoid, BoidR otherBoid)
+        {
+            return otherBoid.gameObject.transform.position - currentBoid.gameObject.transform.position;
         }
 
         Vector3 GetBoidPosition(int i, int j, int k, int boidListPosition)
