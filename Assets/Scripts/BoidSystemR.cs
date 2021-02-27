@@ -47,6 +47,43 @@ namespace Refactored
             }
         }
 
+        void Reset()
+        {
+            //init grid
+            // for each boid in num boids
+            BoidR currentBoid;
+            Vector3 position;
+            for (int i = 0; i < numberBoids; i++)
+            {
+                currentBoid = boidObjectPool[i].GetComponent<BoidR>();
+                position = currentBoid.transform.position;
+
+                if (BoidOutOfBounds(position))
+                {
+                    position = GetRandomStartPosition();
+                    currentBoid.transform.position = position;
+                    currentBoid.Reset();
+                }
+
+                AddBoidToVoxel(position, currentBoid.gameObject);
+            }
+          
+            //hash to position and add the boid to the spot
+
+        }
+
+        /// <summary>
+        /// Calculates whether the position is outside of the fly space
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        bool BoidOutOfBounds(Vector3 position)
+        {
+            return (position.x < 0.0f || position.x > flySpace
+                || position.y < 0.0f || position.y > flySpace
+                || position.z < 0.0f || position.z > flySpace);
+        }
+
         /// <summary>
         ///  Init the uniform spatial grid and each voxel list
         /// </summary>
