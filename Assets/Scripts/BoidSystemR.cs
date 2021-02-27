@@ -187,7 +187,7 @@ namespace Refactored
                     {
                         if (VoxelEmpty(i,j,k)) continue;
                         int boidCountAtVoxel = VoxelCount(i, j, k);
-
+                        
                         int neighbourCount;
 
                         //init forces
@@ -201,20 +201,23 @@ namespace Refactored
                             currentBoidPosition = GetBoidPosition(i, j, k, boidVoxelIndex);
 
                             boidNeighbours = GetBoidNeighbours(i, j, k);
-                            currentBoidPosition = GetBoidPosition(i, j, k, boidInVoxel);
                             neighbourCount = boidNeighbours.Count;
 
-                            int currentBoidID = currentBoid.GetInstanceID();
-                            int boidNeighbourID = boidNeighbours[boidInVoxel].GetInstanceID();
+                            for (int neighbourIndex = 0; neighbourIndex < neighbourCount; neighbourIndex++)
+                            {
+                                int currentBoidID = currentBoid.GetInstanceID();
+                                int boidNeighbourID = boidNeighbours[boidVoxelIndex].GetInstanceID();
 
-                            if (currentBoidID == boidNeighbourID) continue;
+                                if (currentBoidID == boidNeighbourID) continue;
 
-                            BoidR otherBoid = boidNeighbours[boidInVoxel].GetComponent<BoidR>();
+                                BoidR otherBoid = boidNeighbours[neighbourIndex].GetComponent<BoidR>();
 
                                 ComputeWeightAndAccelerations(currentBoid, otherBoid, collision, velocityMatch, centering);
                             }
 
 
+                            Vector3 acceleration = GetAccelerationPrioritization(collision, velocityMatch, centering);
+                            currentBoid.Velocity = ComputeVelocity(acceleration, currentBoid);
 
                             
 
